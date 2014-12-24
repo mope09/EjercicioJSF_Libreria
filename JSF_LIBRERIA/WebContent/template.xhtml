@@ -1,0 +1,47 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+    xmlns:ui="http://java.sun.com/jsf/facelets"
+    xmlns:h="http://java.sun.com/jsf/html"
+    xmlns:f="http://java.sun.com/jsf/core"
+    xmlns:p="http://primefaces.org/ui">
+
+    <h:head>
+        <h:outputStylesheet library="css" name="style.css" target="body" />
+    </h:head>
+    <h:body>
+        <p:layout id="page" fullPage="true">
+            <!-- North -->
+            <p:layoutUnit position="north" size="10%"
+                style="border: none !important">
+            </p:layoutUnit>
+
+            <!-- South -->
+            <p:layoutUnit position="south" size="5%" collapsible="true" gutter="0">
+                <h:outputText value="South unit Content." />
+            </p:layoutUnit>
+
+            <!-- West -->
+            <p:layoutUnit position="west" size="200" header="Menu"
+                collapsible="true" effect="slide" styleClass="menuBar">
+                <h:form id="form1">
+                    <p:panelMenu>
+                        <p:submenu label="Students">
+                            <p:menuitem value="page1" update=":centerpanel"
+                                actionListener="#{layoutController.setNavigation('/Autor.xhtml')}" />
+                            <p:menuitem value="page2" update=":centerpanel"
+                                actionListener="#{layoutController.setNavigation('/Libro.xhtml')}" />
+                        </p:submenu>
+                    </p:panelMenu>
+                </h:form>
+            </p:layoutUnit>
+
+            <!-- Center -->
+            <p:layoutUnit id="center" position="center">
+                <h:panelGroup id="centerpanel" layout="block">
+                    <ui:include id="include" src="/Autor.xhtml" />
+                </h:panelGroup>
+            </p:layoutUnit>
+
+        </p:layout>
+    </h:body>
+
+</html>

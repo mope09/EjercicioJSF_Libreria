@@ -1,0 +1,71 @@
+package com.jsf.autores.servicios;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.jsf.autores.entidades.Libro;
+
+public class ServicioLibros {
+	private static List<Libro> libros;
+
+	private static void cargarLibros() {
+		if (libros == null) {
+			libros = new ArrayList<Libro>();
+
+			libros.add(new Libro(1, ServicioCategorias.buscarCategoria(100),
+					ServicioAutores.buscarAutor(1), "ciencia", 2000, 1500));
+			libros.add(new Libro(2, ServicioCategorias.buscarCategoria(200),
+					ServicioAutores.buscarAutor(2), "tecnologia", 2010, 12000));
+		}
+
+	}
+
+	public static void insertar(Libro libro) throws Exception {
+		cargarLibros();
+		if (buscarLibro(libro.getCodigo()) == null) {
+			libros.add(libro);
+		} else {
+			throw new Exception("El libro ya existe, no se agrega");
+		}
+	}
+
+	public static void actualizar(Libro libro) throws Exception {
+		cargarLibros();
+		Libro modificado = buscarLibro(libro.getCodigo());
+		if (modificado != null) {
+			modificado.setAnio(libro.getAnio());
+			modificado.setAutor(libro.getAutor());
+			modificado.setCategoria(libro.getCategoria());
+			modificado.setCodigo(libro.getCodigo());
+			modificado.setTitulo(libro.getTitulo());
+			modificado.setPrecio(libro.getPrecio());
+			modificado.setCategoria(libro.getCategoria());
+		} else {
+			throw new Exception("No existe el libro que desea modificar");
+		}
+	}
+
+	public static void eliminar(Libro libro) throws Exception {
+		Libro encontrado = buscarLibro(libro.getCodigo());
+		if (encontrado != null) {
+			libros.remove(encontrado);
+		} else {
+			throw new Exception("No existe el libro que desea eliminar ");
+		}
+	}
+
+	public static Libro buscarLibro(int codigo) {
+		cargarLibros();
+		for (Libro lib : libros) {
+			if (lib.getCodigo() == codigo) {
+				return lib;
+			}
+		}
+		return null;
+	}
+
+	public static List<Libro> recuperarTodos() {
+		cargarLibros();
+		return libros;
+	}
+}

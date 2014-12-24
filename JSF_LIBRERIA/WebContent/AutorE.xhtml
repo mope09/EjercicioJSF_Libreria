@@ -1,0 +1,97 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://java.sun.com/jsf/html"
+      xmlns:f="http://java.sun.com/jsf/core"
+      xmlns:ui="http://java.sun.com/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui">
+<ui:composition template="/templates/clearTemplate.xhtml">
+	<ui:define name="tituloPagina">Autores</ui:define>
+	<ui:define name="tituloFormulario">Datos Autor</ui:define>
+	<ui:define name="contenido">
+	<h:form id="formAutores">
+	 <p:growl id="growl" showDetail="true" sticky="true" />
+	 <p:messages />  
+	<p:panel>
+	<p:panelGrid columns="2">
+	<p:outputLabel value="Codigo"></p:outputLabel>
+	<p:inputText value="#{autorControlador.autor.codigo}" onkeypress="return validarEnteros(event)" id="codigo" disabled="#{autorControlador.codigoDesable}"></p:inputText>
+	
+		<p:outputLabel value="Nombre"></p:outputLabel>
+	<p:inputText value="#{autorControlador.autor.nombre}" id="nombre" onkeypress="return validarNombres(event)"></p:inputText>
+	
+		<p:outputLabel value="Apellido"></p:outputLabel>
+	<p:inputText value="#{autorControlador.autor.apellido}" id="apellido" onkeypress="return validarNombres(event)"></p:inputText>
+	
+		<p:outputLabel value="Nacionalidad"></p:outputLabel>
+	
+	<p:selectOneMenu value="#{autorControlador.nacioseleccionada}">
+	<f:selectItems value="#{autorControlador.nacionalidades}" var="varNacionalidad"
+	itemValue="#{varNacionalidad.id}" itemLabel="#{varNacionalidad.gentilicio}"
+	/>
+	</p:selectOneMenu>
+	</p:panelGrid>
+	<p:commandButton value="Grabar" action="#{autorControlador.insertarAutor()}" update="@form tablaAutores" disabled="#{autorControlador.ingresar}">
+	</p:commandButton>
+	<p:commandButton value="Actualizar" update="@form tablaAutores"  action="#{autorControlador.actualizar()}" disabled="#{autorControlador.actualizar}">
+
+	</p:commandButton>
+
+	<p:dataTable value="#{autorControlador.autores}" var ="varTablaAutores" id="tablaAutores">
+	<p:column>
+	<f:facet name="header">
+	<h:outputText value="Codigo" />
+	</f:facet>
+	 <h:outputText value="#{varTablaAutores.codigo}" />
+	 </p:column>
+	 <p:column>
+	 <f:facet name="header">
+	 <h:outputText value="Nombre" />
+	 </f:facet>
+	 <h:outputText value="#{varTablaAutores.nombre}" />
+	 </p:column>
+	 <p:column>
+	 <f:facet name="header">
+	 <h:outputText value="Apellido" />
+	 </f:facet>
+	 <h:outputText value="#{varTablaAutores.apellido}" />
+	 </p:column>
+	<p:column>
+	<f:facet name="header">
+	<h:outputText value="Nacionalida" />
+	</f:facet>
+	<h:outputText value="#{varTablaAutores.nacionalidad.gentilicio}" />
+	</p:column>
+	<p:column>
+	<f:facet name="header">
+	<h:outputText value="Acciones" />
+	</f:facet>
+	<h:panelGrid columns="4">
+		
+	
+	<p:commandButton value="Seleccionar" update="@form " process="@this" action="#{autorControlador.seleccionar()}">
+	<f:setPropertyActionListener target="#{autorControlador.autor}" value="#{varTablaAutores}"></f:setPropertyActionListener>
+	</p:commandButton>
+	
+	
+	<p:commandButton value="Eliminar"  process="@this" onclick="dialog.show()">
+	<f:setPropertyActionListener target="#{autorControlador.autor}" value="#{varTablaAutores}"></f:setPropertyActionListener>
+	</p:commandButton>
+	</h:panelGrid>
+	</p:column>
+	</p:dataTable>
+	</p:panel>
+	</h:form>
+	<p:dialog id="dlg1" widgetVar="dialog" header="Dialogo" modal="true">
+	<h:form >
+	<h:outputText value="Desea eliminar el registro?" />
+	<p:commandButton value="Si" onclick="dialog.hide()" action="#{autorControlador.eliminar()}" update=":formAutores :formAutores:tablaAutores"  >
+	
+	</p:commandButton>
+	 <p:commandButton value="No" onclick="dialog.hide()" >
+	</p:commandButton>
+	</h:form>
+	</p:dialog>
+	
+	</ui:define>
+	</ui:composition>
+</html>
